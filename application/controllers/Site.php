@@ -29,12 +29,14 @@ class Site extends MY_Controller {
 		# Don't forget to add the function for the page below!
 		$this->nav = array( array('Forum', site_url('site/forum'), 'view_forum'),
 							array('Files', site_url('site/files'), 'view_files'),
+							array('Posts', site_url('site/posts'), 'view_posts')
 			);
 		if($this->verify_min_level(9)){
 			array_push($this->nav, array('Users', site_url('site/users'), 'view_users'));
 			array_push($this->nav, array('Announcements', site_url('site/new_announcement'), 'view_new_announcement'));
 		}
 		$this->load->vars(array('NavigationArray'=>$this->nav));
+		$this->load->library("pagination");
 	}
 	public function users(){
 		$query = $this->db->get('users');
@@ -90,6 +92,23 @@ class Site extends MY_Controller {
 	}
 	public function files(){
 		$this->view($this->nav[1][2]);
+	}
+	public function posts(){
+		$this->load->model("Post_model");
+		$config = array();
+        $config["per_page"] = 10;
+		$config['total_rows'] = $this->Post_model->record_count();
+		$config["base_url"] = site_url('site/posts');
+		$config["num_tag_open"] = "&nbsp;";
+		$config["num_tag_close"] = "&nbsp;";
+        $this->pagination->initialize($config);
+		$data = array();
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data["results"] = $this->Post_model->get_posts($config["per_page"], $page);
+        $data["pagination"] = $this->pagination->create_links();
+		
+        // $this->load->view("example1", $data);
+		$this->view($this->nav[2][2], $data);
 	}
 	public function send_email($subject, $body){
 		$query = $this->db->get('users');
