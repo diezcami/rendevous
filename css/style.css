@@ -4,16 +4,43 @@
 }
 .carousel{
 }
+
 .announcements{
 	position:relative;
 }
 .navbar-default{
-	background-color:#BDD464;
+	background-color:#00B2EE;
 }
 .navbar-default .navbar-nav > li > a{
 	color: #FFFFFF;
 }
-
 .navbar-default .navbar-nav > li > a:hover {
-	color: #FFFFFF;
+	color: #EFEFEF;
+}
+
+
+@font-face{
+  font-family: "BentonSans";
+  src: url("http://s1.ft-static.com/m/font/ft-velcro/bentonsans-regular.eot");
+  src: url("http://s1.ft-static.com/m/font/ft-velcro/bentonsans-regular.eot?#iefix") format("embedded-opentype"), 
+  url("http://interactivegraphics.ft-static.com/inc/fonts/BentonSansRegular.woff") format("woff"),
+  url("http://interactivegraphics.ft-static.com/inc/fonts/BentonSansRegular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+@font-face{
+  font-family: "BentonSans";
+  src: url("http://s1.ft-static.com/m/font/ft-velcro/bentonsans-bold.eot");
+  src: url("http://s1.ft-static.com/m/font/ft-velcro/bentonsans-bold.eot?#iefix") format("embedded-opentype"), 
+  url("http://interactivegraphics.ft-static.com/inc/fonts/BentonSansBold.woff") format("woff"),
+  url("http://interactivegraphics.ft-static.com/inc/fonts/BentonSansBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: bold;
+}
+body {
+  font-family:"BentonSans";
+  cursor:default;
+  background-color:#fefefe;
+  color: #333;
+  font-size: 12px;
 }
