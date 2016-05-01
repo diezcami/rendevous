@@ -95,6 +95,12 @@ class Site extends MY_Controller {
 	public function profile(){
 		$this->view($this->nav[1][2]);
 	}
+    public function transactions(){
+        $this->view($this->nav[2][2]);
+    }
+    public function settings(){
+        $this->view($this->nav[3][2]);
+    }
 	public function posts(){
 		$this->load->model("Post_model");
 		$config = array();
@@ -110,16 +116,8 @@ class Site extends MY_Controller {
         $data["pagination"] = $this->pagination->create_links();
 		
         // $this->load->view("example1", $data);
-		$this->view($this->nav[2][2], $data);
+		$this->view($this->nav[4][2], $data);
 	}
-
-    public function transactions(){
-        $this->view($this->nav[2][2]);
-    }
-    public function settings(){
-        $this->view($this->nav[3][2]);
-    }
-
 	public function send_email($subject, $body){
 		$query = $this->db->get('users');
 		$result = $query->result();
