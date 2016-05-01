@@ -27,8 +27,10 @@ class Site extends MY_Controller {
 		# array('Page Name', 'url', 'view name*' )
 		# *the view that will be loaded.
 		# Don't forget to add the function for the page below!
-		$this->nav = array( array('Forum', site_url('site/forum'), 'view_forum'),
-							array('Files', site_url('site/files'), 'view_files'),
+		$this->nav = array( array('Dashboard', site_url('site/dashboard'), 'view_dashboard'),
+							array('Profile', site_url('site/profile'), 'view_profile'),
+                            array('Transactions', site_url('site/transactions'), 'view_transactions'),
+                            array('Settings', site_url('site/settings'), 'view_settings')
 			);
 		if($this->verify_min_level(9)){
 			array_push($this->nav, array('Users', site_url('site/users'), 'view_users'));
@@ -50,12 +52,12 @@ class Site extends MY_Controller {
 		   echo $row->email;
 		}*/
 		if($this->verify_min_level(9)){
-			$this->view($this->nav[2][2], $data);
+			$this->view($this->nav[4][2], $data);
 		}
 	}
 	public function new_announcement(){
 		if($this->verify_min_level(9)){
-			$this->view($this->nav[3][2]);
+			$this->view($this->nav[5][2]);
 			if(isset($_POST['subject'])){
 				$this->send_email($_POST['subject'], $_POST['body']);
 			}
@@ -85,12 +87,19 @@ class Site extends MY_Controller {
 	public function home(){
 		$this->view();
 	}
-	public function forum(){
+	public function dashboard(){
 		$this->view($this->nav[0][2]);
 	}
-	public function files(){
+	public function profile(){
 		$this->view($this->nav[1][2]);
 	}
+    public function transactions(){
+        $this->view($this->nav[2][2]);
+    }
+    public function settings(){
+        $this->view($this->nav[3][2]);
+    }
+
 	public function send_email($subject, $body){
 		$query = $this->db->get('users');
 		$result = $query->result();
@@ -121,8 +130,8 @@ class Site extends MY_Controller {
             'passwd'     => $pword,
             'email'      => $email,
             'auth_level' => $auth_level, // 9 if you want to login @ examples/index.
-        );
-        /*$user_data = array(
+        );/*
+        $user_data = array(
             'username'   => 'admin',
             'passwd'     => '45passworD',
             'email'      => 'admin@compsat.org',

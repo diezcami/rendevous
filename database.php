@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'compsato_cord',
-	'password' => 'DGjywv9q3V8XQxSG',
-	'database' => 'compsato_cord',
+	'hostname' => 'localhost:8889',
+	'username' => 'rendevous',
+	'password' => '.,.,',
+	'database' => 'communityauth',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
