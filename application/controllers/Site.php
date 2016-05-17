@@ -30,7 +30,7 @@ class Site extends CI_Controller {
         $this->nav = array( array('Dashboard', site_url('site/dashboard'), 'view_dashboard'),
                             array('Profile', site_url('site/profile'), 'view_profile'),
                             array('Transactions', site_url('site/transactions'), 'view_transactions'),
-                            array('Forum', site_url('site/forum'), 'view_forum'),
+                            array('Posts', site_url('site/posts'), 'view_posts'),
                             array('Settings', site_url('site/settings'), 'view_settings')
             );
         if($this->ion_auth->is_admin()){
@@ -41,38 +41,55 @@ class Site extends CI_Controller {
         $this->load->library("pagination");
     }
     
-    public function forum(){
+    public function posts(){
+        $this->load->helper('text');
+        $this->db->select('*');
+        $this->db->from('post');
+        $this->db->join('users', 'post.user_id = users.id');
+        $this->db->where('post.type', 'client');
+       $query = $this->db->get();
 
-        /*$this->db->select('*');
-        $this->db->from('posts');
-        $this->db->join('users', 'posts.user_id = users.user_id');
-        $this->db->where('posts.post_id=discussion_id');
-        $this->db->where('type', '0');
-
-        $query = $this->db->get();
-
-        $data['announcements'] = $query->result();
+        $data['jobs'] = $query->result();
 
         $this->db->select('*');
-        $this->db->from('posts');
-        $this->db->join('users', 'posts.user_id = users.user_id');
-        $this->db->where('posts.post_id=discussion_id');
-        $this->db->where('type', '1');
+        $this->db->from('post');
+        $this->db->join('users', 'post.user_id = users.id');
+        $this->db->where('post.type', 'dev');
+        $query = $this->db->get();
 
+        $data['devs'] = $query->result();
+
+        $this->view($this->nav[3][2], $data);
+    }
+
+    public function post($post_id){
+        //var_dump($this->auth_user_id);
+        $this->db->select('*');
+        $this->db->from('post');
+        $this->db->join('users', 'post.user_id = users.id');
+        $this->db->where('orig_post', $post_id);
         $query = $this->db->get();
 
         $data['posts'] = $query->result();
 
-        $this->view($this->nav[5][2], $data);*/
-        $this->view($this->nav[3][2]);
+        $this->db->select('title');
+        $this->db->from('post');
+        $this->db->where('post_id', $post_id);
+        $query = $this->db->get();
+
+        $res = $query->result();
+        //var_dump($res);
+        $data['post_title'] = $res[0]->title;
+        $data['post_id'] = $post_id;
+
+        $this->view('view_post', $data);
     }
+
     public function new_announcement(){
-        //if($this->verify_min_level(9)){
             $this->view($this->nav[6][2]);
             if(isset($_POST['subject'])){
                 $this->send_email($_POST['subject'], $_POST['body']);
             }
-        //}
     }
     public function view($currentPage = 'view_home', $data = null){
         $signedIn = false;
@@ -80,6 +97,7 @@ class Site extends CI_Controller {
         if(strcasecmp($currentPage, 'view_home') == 0){
             $isWelcome = true;
         }
+        $data['user'] = $this->ion_auth->user()->row();
         $data['activeLink'] = $currentPage;
         $data['isWelcome'] = $isWelcome;
         if($this->ion_auth->logged_in()){
@@ -144,18 +162,22 @@ class Site extends CI_Controller {
             mail($user->email,$subject,$body);
         }
     }
+    public function edit_user($user_id){
+        $data['user'] = $this->db->get_where('users', array('id' => $user_id))->result();
+
+        $this->db->select('users.id, groups.name');
+        $this->db->from('users');
+        $this->db->join('users_groups', 'users.id = users_groups.user_id');
+        $this->db->join('groups', 'groups.id = users_groups.group_id');
+        $this->db->where('users.id', $user_id);
+
+        $query = $this->db->get();
+        $data['usergroup'] = $query->result();
+
+        $this->view('view_edit_user', $data);
+    }
     public function login(){
-        // Method should not be directly accessible
-        //if( $this->uri->uri_string() == 'examples/login')
-        //   show_404();
-
-       // if( strtolower( $_SERVER['REQUEST_METHOD'] ) == 'post' )
-         //   $this->require_min_level(1);
-
-        //$this->setup_login_form();
-        //$html = $this->load->view('examples/page_header', '', TRUE);
         $this->load->view('view_login');
-        //$html .= $this->load->view('examples/page_footer', '', TRUE);
     }
     public function logout(){
         $this->ion_auth->logout();

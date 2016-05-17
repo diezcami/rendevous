@@ -47,7 +47,7 @@
             }
             echo "</td>";
             echo "<td class='details'>
-              <a class=\"btn btn-default btn-sm glyphicon glyphicon-minus-sign\" onclick=\"return confirm('Are you sure you want to delete this user?: ".$user->username."');\" type='button' href='".site_url("/user/delete_user/".$user->id)."'></a>
+              <a class=\"btn btn-default btn-sm glyphicon glyphicon-minus-sign\" onclick=\"return confirm('Are you sure you want to delete this user?: ".$user->first_name." ".$user->last_name."');\" type='button' href='".site_url("/user/delete_user/".$user->id)."'></a>
               <a class='btn btn-default btn-sm glyphicon glyphicon-list-alt' type='button' href='".site_url("/site/edit_user/".$user->id)."'></a>
             </td>";
             echo"</tr>";

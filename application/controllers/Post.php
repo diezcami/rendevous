@@ -13,7 +13,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @link        http://community-auth.com
  */
 
-class Forum extends CI_Controller{
+class Post extends CI_Controller{
     public function __construct(){
         parent::__construct();
         $this->load->helper('url');
@@ -23,14 +23,14 @@ class Forum extends CI_Controller{
         # *the view that will be loaded.
         # Don't forget to add the function for the page below!
     }
-    public function new_reply($discussion_id,$user_id){
+    public function new_reply($post_id, $user_id){
         $data = array(
-           'content' => $_POST['body'],
+           'description' => $_POST['body'],
            'user_id' => $user_id,
-           'discussion_id' => $discussion_id
+           'orig_post' => $post_id
         );
-        $this->db->insert('posts', $data);
+        $this->db->insert('post', $data);
 
-        redirect(site_url('/site/discussion/'.$discussion_id));
+        redirect(site_url('/site/post/'.$post_id));
     }
 }

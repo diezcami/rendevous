@@ -24,19 +24,18 @@ class User extends CI_Controller{
         # Don't forget to add the function for the page below!
     }
     public function delete_user($user_id){
-        $this->db->delete('users', array('user_id' => $user_id));
+        $this->db->delete('users', array('id' => $user_id));
         redirect(site_url('/site/users'));
     }
     
     public function edit_user($user_id){
+
         $data = array(
-               'username' => $_POST['username'],
-               'email' => $_POST['email'],
-               'name' => $_POST['name'],
-               'auth_level' => $_POST['auth_level']
+               'first_name' => $this->input->post('first_name'),
+               'last_name' => $this->input->post('last_name'),
+               'email' => $this->input->post('email')
             );
-        $this->db->where('user_id', $user_id);
-        $this->db->update('users', $data);
+        $this->ion_auth->update($user_id, $data);
         redirect(site_url('/site/users'));
     }
 
