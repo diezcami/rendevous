@@ -16,7 +16,7 @@
     <tbody>
       <?php
         //var_dump($posts);
-          if(count($announcements)!=0){
+          /*if(count($announcements)!=0){
             foreach( $announcements as $announcement ){
               echo "
                 <tr>
@@ -29,12 +29,12 @@
                 </tr>
               ";
           }
-        }else{
+        }else{*/
           echo '<tr>
             <td></td>
             <td colspan="4" class="center">No topics have been added yet.</td>
           </tr>'; 
-        }
+       // }
       ?>
     </tbody>
   </table>
@@ -52,7 +52,7 @@
     <tbody>
       <?php
         //var_dump($posts);
-        if(count($posts)!=0){
+        /*if(count($posts)!=0){
           foreach( $posts as $post ){
             echo "
               <tr>
@@ -65,12 +65,12 @@
               </tr>
             ";
           }
-        }else{
+        }else{*/
           echo '<tr>
             <td></td>
             <td colspan="4" class="center">No topics have been added yet.</td>
           </tr>'; 
-        }
+        //}
         
 
       ?>

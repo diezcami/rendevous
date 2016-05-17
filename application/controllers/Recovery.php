@@ -13,7 +13,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @link        http://community-auth.com
  */
 
-class Recovery extends MY_Controller{
+class Recovery extends CI_Controller{
     public function __construct(){
         parent::__construct();
         $this->load->helper('url');

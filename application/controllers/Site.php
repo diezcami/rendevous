@@ -33,33 +33,17 @@ class Site extends CI_Controller {
                             array('Forum', site_url('site/forum'), 'view_forum'),
                             array('Settings', site_url('site/settings'), 'view_settings')
             );
-        //if($this->verify_min_level(9)){
+        if($this->ion_auth->is_admin()){
             array_push($this->nav, array('Users', site_url('site/users'), 'view_users'));
             array_push($this->nav, array('Announcements', site_url('site/new_announcement'), 'view_new_announcement'));
-        //}
+        }
         $this->load->vars(array('NavigationArray'=>$this->nav));
         $this->load->library("pagination");
     }
-    public function users(){
-        $query = $this->db->get('users');
-        if(isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['vpassword'])){
-            if($_POST['password']==$_POST['vpassword']){
-                //echo $_POST['username']." ".$_POST['email']." ".$_POST['password']." ".$_POST['vpassword'];
-                $this->create_user($_POST['username'], $_POST['password'], $_POST['email'], '1');
-            }else echo "Passwords don't match.";
-        }
-        $data['users'] = $query->result();
-        /*foreach ($query->result() as $row){
-           echo $row->username;
-           echo $row->email;
-        }*/
-        //if($this->verify_min_level(9)){
-            $this->view($this->nav[4][2], $data);
-        //}
-    }
+    
     public function forum(){
 
-        $this->db->select('*');
+        /*$this->db->select('*');
         $this->db->from('posts');
         $this->db->join('users', 'posts.user_id = users.user_id');
         $this->db->where('posts.post_id=discussion_id');
@@ -79,15 +63,15 @@ class Site extends CI_Controller {
 
         $data['posts'] = $query->result();
 
-        $this->view($this->nav[3][2], $data);
+        $this->view($this->nav[5][2], $data);*/
+        $this->view($this->nav[3][2]);
     }
     public function new_announcement(){
         //if($this->verify_min_level(9)){
-            $this->view($this->nav[5][2]);
+            $this->view($this->nav[6][2]);
             if(isset($_POST['subject'])){
                 $this->send_email($_POST['subject'], $_POST['body']);
             }
-            
         //}
     }
     public function view($currentPage = 'view_home', $data = null){
@@ -110,18 +94,6 @@ class Site extends CI_Controller {
     public function index(){
         $this->view();
     }
-    public function home(){
-        $this->view();
-    }
-    public function profile(){
-        $this->view($this->nav[1][2]);
-    }
-    public function transactions(){
-        $this->view($this->nav[2][2]);
-    }
-    public function settings(){
-        $this->view($this->nav[4][2]);
-    }
     public function dashboard(){
         $this->load->model("Dashboard_model");
         $config = array();
@@ -138,6 +110,30 @@ class Site extends CI_Controller {
         
         // $this->load->view("example1", $data);
         $this->view($this->nav[0][2], $data);
+    }
+    public function profile(){
+        $this->view($this->nav[1][2]);
+    }
+    public function transactions(){
+        $this->view($this->nav[2][2]);
+    }
+    public function settings(){
+        $this->view($this->nav[4][2]);
+    }
+    public function users(){
+
+        $query = $this->db->get('users');
+        $data['users'] = $query->result();
+
+        $this->db->select('users.id, groups.name');
+        $this->db->from('users');
+        $this->db->join('users_groups', 'users.id = users_groups.user_id');
+        $this->db->join('groups', 'groups.id = users_groups.group_id');
+
+        $query = $this->db->get();
+        $data['usergroup'] = $query->result();
+
+        $this->view($this->nav[5][2], $data);
     }
     public function send_email($subject, $body){
         $query = $this->db->get('users');
@@ -160,10 +156,6 @@ class Site extends CI_Controller {
         //$html = $this->load->view('examples/page_header', '', TRUE);
         $this->load->view('view_login');
         //$html .= $this->load->view('examples/page_footer', '', TRUE);
-    }
-
-    public function create_user($username=null, $pword=null, $email=null, $auth_level=null){
-       
     }
     public function logout(){
         $this->ion_auth->logout();

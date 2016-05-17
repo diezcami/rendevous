@@ -13,7 +13,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @link        http://community-auth.com
  */
 
-class User extends MY_Controller{
+class User extends CI_Controller{
     public function __construct(){
         parent::__construct();
         $this->load->helper('url');
@@ -41,9 +41,9 @@ class User extends MY_Controller{
     }
 
     public function new_user(){
-        if(isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['vpassword'])){
+        if(isset($_POST['email'], $_POST['password'], $_POST['vpassword'])){
             if($_POST['password']==$_POST['vpassword']){
-                $this->create_user($_POST['username'], $_POST['password'], $_POST['email'], $_POST['auth_level'], $_POST['name']);
+                $this->create_user($_POST['password'], $_POST['email'], $_POST['group'], $_POST['first_name'], $_POST['last_name']);
             }else echo "Passwords don't match.";
         }
         
@@ -55,98 +55,34 @@ class User extends MY_Controller{
         //$this->view($this->nav[2][2], $data);
     }
 
-    public function create_user($username=null, $pword=null, $email=null, $auth_level=null, $name){
-        // Customize this array for your user
-        $user_data = array(
-            'username'   => $username,
-            'passwd'     => $pword,
-            'email'      => $email,
-            'auth_level' => $auth_level,
-            'name'       => $name
-        );
-        /*$user_data = array(
-            'username'   => 'admin',
-            'passwd'     => '45passworD',
-            'email'      => 'admin@compsat.org',
-            'auth_level' => '9', // 9 if you want to login @ examples/index.
-        );*/
-
-        $this->is_logged_in();
-
-        //echo $this->load->view('examples/page_header', '', TRUE);
-
-        // Load resources
-        $this->load->model('examples_model');
-        $this->load->model('validation_callables');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_data( $user_data );
-
-        $validation_rules = array(
-            array(
-                'field' => 'username',
-                'label' => 'username',
-                'rules' => 'max_length[12]|is_unique[' . config_item('user_table') . '.username]',
-                'errors' => array(
-                    'is_unique' => 'Username already in use.'
-                )
-            ),
-            array(
-                'field' => 'passwd',
-                'label' => 'passwd',
-                'rules' => array(
-                    'trim',
-                    'required',
-                    array( 
-                        '_check_password_strength', 
-                        array( $this->validation_callables, '_check_password_strength' ) 
-                    )
-                ),
-                'errors' => array(
-                    'required' => 'The password field is required.'
-                )
-            ),
-            array(
-                'field'  => 'email',
-                'label'  => 'email',
-                'rules'  => 'trim|required|valid_email|is_unique[' . config_item('user_table') . '.email]',
-                'errors' => array(
-                    'is_unique' => 'Email address already in use.'
-                )
-            ),
-            array(
-                'field' => 'auth_level',
-                'label' => 'auth_level',
-                'rules' => 'required|integer|in_list[1,6,9]'
-            )
-        );
-
-        $this->form_validation->set_rules( $validation_rules );
-
-        if( $this->form_validation->run() )
-        {
-            $user_data['passwd']     = $this->authentication->hash_passwd($user_data['passwd']);
-            $user_data['user_id']    = $this->examples_model->get_unused_id();
-            $user_data['created_at'] = date('Y-m-d H:i:s');
-
-            // If username is not used, it must be entered into the record as NULL
-            if( empty( $user_data['username'] ) )
+    public function login(){
+        if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $this->input->post('remember')=='on'))
             {
-                $user_data['username'] = NULL;
+                //if the login is successful
+                //redirect them back to the home page
+                $this->session->set_flashdata('message', $this->ion_auth->messages());
             }
+            else
+            {
+                // if the login was un-successful
+                // redirect them back to the login page
+                $this->session->set_flashdata('message', $this->ion_auth->errors());
+                 // use redirects instead of loading views for compatibility with MY_Controller libraries
+            }
+            redirect(site_url());
+    }
 
-            $this->db->set($user_data)
-                ->insert(config_item('user_table'));
-
-            if( $this->db->affected_rows() == 1 );
-                //$this->users();
-                //echo '<h1>Congratulations</h1>' . '<p>User ' . $user_data['username'] . ' was created.</p>';
+    public function create_user($pword=null, $email=null, $group=null, $first_name=null, $last_name=null){
+        $additional_data = array(
+                                'first_name' => $first_name,
+                                'last_name' => $last_name,
+                                );
+        if($group=='1'){
+            $group = array('1','2');
+        }else if($group=='2'){
+            $group = array('2');
         }
-        else
-        {
-            echo '<h1>User Creation Error(s)</h1>' . validation_errors();
-        }
 
-        //echo $this->load->view('examples/page_footer', '', TRUE);
+        $this->ion_auth->register($email, $pword, $email, $additional_data, $group);
     }
 }
