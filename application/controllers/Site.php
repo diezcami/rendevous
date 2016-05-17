@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Site extends MY_Controller {
+class Site extends CI_Controller {
 
     /**
      * Index Page for this controller.
@@ -32,10 +32,10 @@ class Site extends MY_Controller {
                             array('Transactions', site_url('site/transactions'), 'view_transactions'),
                             array('Settings', site_url('site/settings'), 'view_settings')
             );
-        if($this->verify_min_level(9)){
+        //if($this->verify_min_level(9)){
             array_push($this->nav, array('Users', site_url('site/users'), 'view_users'));
             array_push($this->nav, array('Announcements', site_url('site/new_announcement'), 'view_new_announcement'));
-        }
+        //}
         $this->load->vars(array('NavigationArray'=>$this->nav));
         $this->load->library("pagination");
     }
@@ -52,18 +52,18 @@ class Site extends MY_Controller {
            echo $row->username;
            echo $row->email;
         }*/
-        if($this->verify_min_level(9)){
+        //if($this->verify_min_level(9)){
             $this->view($this->nav[4][2], $data);
-        }
+        //}
     }
     public function new_announcement(){
-        if($this->verify_min_level(9)){
+        //if($this->verify_min_level(9)){
             $this->view($this->nav[5][2]);
             if(isset($_POST['subject'])){
                 $this->send_email($_POST['subject'], $_POST['body']);
             }
             
-        }
+        //}
     }
     public function view($currentPage = 'view_home', $data = null){
         $signedIn = false;
@@ -80,9 +80,9 @@ class Site extends MY_Controller {
         $this->load->view('footer');
     }
     public function index(){
-        if( $this->require_min_level(1) ){
+       // if( $this->require_min_level(1) ){
             $this->view();
-        }
+       // }
         
     }
     public function home(){
@@ -128,8 +128,8 @@ class Site extends MY_Controller {
         //if( $this->uri->uri_string() == 'examples/login')
         //   show_404();
 
-        if( strtolower( $_SERVER['REQUEST_METHOD'] ) == 'post' )
-            $this->require_min_level(1);
+       // if( strtolower( $_SERVER['REQUEST_METHOD'] ) == 'post' )
+         //   $this->require_min_level(1);
 
         $this->setup_login_form();
         //$html = $this->load->view('examples/page_header', '', TRUE);
@@ -138,19 +138,19 @@ class Site extends MY_Controller {
     }
 
     public function create_user($username=null, $pword=null, $email=null, $auth_level=null){
-        // Customize this array for your user
+       /* // Customize this array for your user
         $user_data = array(
             'username'   => $username,
             'passwd'     => $pword,
             'email'      => $email,
             'auth_level' => $auth_level, // 9 if you want to login @ examples/index.
-        );/*
+        );
         $user_data = array(
             'username'   => 'admin',
             'passwd'     => '45passworD',
             'email'      => 'admin@compsat.org',
             'auth_level' => '9', // 9 if you want to login @ examples/index.
-        );*/
+        );
 
         $this->is_logged_in();
 
@@ -228,7 +228,7 @@ class Site extends MY_Controller {
             echo '<h1>User Creation Error(s)</h1>' . validation_errors();
         }
 
-        echo $this->load->view('examples/page_footer', '', TRUE);
+        echo $this->load->view('examples/page_footer', '', TRUE);*/
     }
     public function logout(){
         $this->authentication->logout();
