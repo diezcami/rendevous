@@ -39,6 +39,7 @@ class Site extends MY_Controller {
         $this->load->vars(array('NavigationArray'=>$this->nav));
         $this->load->library("pagination");
     }
+
     public function users(){
         $query = $this->db->get('users');
         if(isset($_POST['username'], $_POST['email'], $_POST['password'], $_POST['vpassword'])){
@@ -88,9 +89,15 @@ class Site extends MY_Controller {
     public function home(){
         $this->view();
     }
-    public function profile(){
-        $this->view($this->nav[1][2]);
+
+    public function profile($username = null){
+        $this->load->model("User_Model");
+        $data['user'] = $this->User_Model->get_user($username);
+        $data['user'] = $data['user'][0]; // Always just one entry
+        $data['display_user'] = $username==null?false:true;
+        $this->view($this->nav[1][2], $data);  
     }
+
     public function transactions(){
         $this->view($this->nav[2][2]);
     }
