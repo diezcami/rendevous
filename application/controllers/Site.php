@@ -74,6 +74,7 @@ class Site extends MY_Controller {
 		}
 		$data['activeLink'] = $currentPage;
 		$data['isWelcome'] = $isWelcome;
+		
 		//$data = array( 'activeLink' => $currentPage,
 		//				'isWelcome'=> $isWelcome);
 		$this->load->view('header', $data);
@@ -103,6 +104,7 @@ class Site extends MY_Controller {
     }
 	public function posts(){
 		$this->load->model("Post_model");
+		$this->Post_model->set_type('client');
 		$config = array();
         $config["per_page"] = 10;
 		$config['total_rows'] = $this->Post_model->record_count();
@@ -115,7 +117,6 @@ class Site extends MY_Controller {
         $data["results"] = $this->Post_model->get_posts($config["per_page"], $page);
         $data["pagination"] = $this->pagination->create_links();
 		
-        // $this->load->view("example1", $data);
 		$this->view($this->nav[4][2], $data);
 	}
 	public function send_email($subject, $body){

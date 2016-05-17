@@ -44,3 +44,9 @@ body {
   color: #333;
   font-size: 12px;
 }
+.search{
+  padding-top: 4%;
+}
+.search input{
+  height: 30px;
+}

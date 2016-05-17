@@ -9,5 +9,4 @@
 	<?php endforeach; ?>
 	</ul>
 	<p> <?=$pagination?> </p>
-
 </div>
