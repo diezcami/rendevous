@@ -42,32 +42,35 @@ class Site extends CI_Controller {
     }
     public function posts(){
         $this->load->helper('text');
-
+        //var_dump($this->input->post('search_query'));
         $this->db->select('*');
         $this->db->from('post');
         $this->db->join('users', 'post.user_id = users.id');
-        if("" !== $this->input->post('search_query')){      
-           $search_query = $this->input->post('search_query');
-           $this->db->like('post.title', $search_query, 'both');
-           $this->db->or_like('post.description', $search_query, 'both');  
-        }
         $this->db->where('post.type', 'client');
         $this->db->where('post.post_id = post.orig_post');
-        $query = $this->db->get();
-        $data['jobs'] = $query->result();
-        $this->db->select('*');
-        $this->db->from('post');
-        $this->db->join('users', 'post.user_id = users.id');
-        
-        if("" !== $this->input->post('search_query')){      
+        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){      
            $search_query = $this->input->post('search_query');
            $this->db->like('post.title', $search_query, 'both');
            $this->db->or_like('post.description', $search_query, 'both');  
         }
+        
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        $data['jobs'] = $query->result();
+        
+        $this->db->select('*');
+        $this->db->from('post');
+        $this->db->join('users', 'post.user_id = users.id');
         $this->db->where('post.type', 'dev');
         $this->db->where('post.post_id = post.orig_post');
+        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){      
+           $search_query = $this->input->post('search_query');
+           $this->db->like('post.title', $search_query, 'both');
+           $this->db->or_like('post.description', $search_query, 'both');  
+        }
+        
         $query = $this->db->get();
-
+        //echo $this->db->last_query();
         $data['devs'] = $query->result();
         $data['search_query'] = $this->input->post('search_query');
 
