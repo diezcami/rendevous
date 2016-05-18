@@ -127,8 +127,12 @@ class Site extends CI_Controller {
         // $this->load->view("example1", $data);
         $this->view($this->nav[0][2], $data);
     }
-    public function profile(){
-        $this->view($this->nav[1][2]);
+    public function profile($username = null){
+        $this->load->model("User_Model");
+        $data['user'] = $this->User_Model->get_user($username);
+        $data['user'] = $data['user'][0]; // Always just one entry
+        $data['display_user'] = $username==null?false:true;
+        $this->view($this->nav[1][2], $data);  
     }
     public function transactions(){
         $this->view($this->nav[2][2]);
@@ -157,6 +161,7 @@ class Site extends CI_Controller {
                 $this->send_email($_POST['subject'], $_POST['body']);
             }
     }
+    
     public function send_email($subject, $body){
         $query = $this->db->get('users');
         $result = $query->result();
