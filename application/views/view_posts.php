@@ -1,5 +1,21 @@
 <div class="container">
   <br>
+  <div class="row">
+    <div class="col-md-6"></div>
+    <div class="col-md-6">
+      <?php echo form_open(site_url('site/posts/')); ?>
+      <div class="input-group">
+        
+        <input type="text" name='search_query' id='search_query' class="form-control" placeholder="Search for..." <?php if(isset($search_query))echo 'value="'.$search_query.'"';?>>
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">Go!</button>
+        </span>
+        
+      </div>
+      </form>
+    </div>
+  </div>
+  <br>
   <table class="table forum table-striped">
       <thead>
       <tr>
@@ -13,8 +29,6 @@
     </thead>
     <tbody>
       <?php
-
-        //var_dump($posts);
           if(count($jobs)!=0){
             foreach( $jobs as $job ){
               echo "
