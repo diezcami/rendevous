@@ -40,14 +40,15 @@ class Site extends CI_Controller {
         $this->load->vars(array('NavigationArray'=>$this->nav));
         $this->load->library("pagination");
     }
-    
     public function posts(){
         $this->load->helper('text');
+
         $this->db->select('*');
         $this->db->from('post');
         $this->db->join('users', 'post.user_id = users.id');
         $this->db->where('post.type', 'client');
-       $query = $this->db->get();
+        $this->db->where('post.post_id = post.orig_post');
+        $query = $this->db->get();
 
         $data['jobs'] = $query->result();
 
@@ -55,13 +56,13 @@ class Site extends CI_Controller {
         $this->db->from('post');
         $this->db->join('users', 'post.user_id = users.id');
         $this->db->where('post.type', 'dev');
+        $this->db->where('post.post_id = post.orig_post');
         $query = $this->db->get();
 
         $data['devs'] = $query->result();
 
         $this->view($this->nav[3][2], $data);
     }
-
     public function post($post_id){
         //var_dump($this->auth_user_id);
         $this->db->select('*');
@@ -84,12 +85,9 @@ class Site extends CI_Controller {
 
         $this->view('view_post', $data);
     }
-
-    public function new_announcement(){
-            $this->view($this->nav[6][2]);
-            if(isset($_POST['subject'])){
-                $this->send_email($_POST['subject'], $_POST['body']);
-            }
+    public function new_post($post_type, $user_id){
+        $data['post_type'] = $post_type;
+        $this->view('view_new_post', $data);
     }
     public function view($currentPage = 'view_home', $data = null){
         $signedIn = false;
@@ -152,6 +150,12 @@ class Site extends CI_Controller {
         $data['usergroup'] = $query->result();
 
         $this->view($this->nav[5][2], $data);
+    }
+    public function new_announcement(){
+            $this->view($this->nav[6][2]);
+            if(isset($_POST['subject'])){
+                $this->send_email($_POST['subject'], $_POST['body']);
+            }
     }
     public function send_email($subject, $body){
         $query = $this->db->get('users');

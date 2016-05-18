@@ -19,11 +19,11 @@ foreach ($posts as $post) {
   echo '
 <div class="panel panel-default" id="a9">
   <div class="panel-heading">     
-    <div class="panel-title">'.$post->title.'    
+    <!--<div class="panel-title">'.$post->title.'    
       <div class="pull-right">  
         <div class="btn-group hidden-md hidden-lg"></div>
       </div>
-    </div>
+    </div>-->
   </div>  
   <div class="panel-body thread-row"> 
     <div class="row thread-row">

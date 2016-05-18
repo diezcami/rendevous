@@ -33,4 +33,23 @@ class Post extends CI_Controller{
 
         redirect(site_url('/site/post/'.$post_id));
     }
+
+    public function new_post($post_type, $user_id){
+        $data = array(
+            'user_id' => $user_id,
+            'title' => $this->input->post('title'),
+            'description' => $this->input->post('description'),
+            'type' => $post_type
+        );
+        $this->db->insert('post', $data);
+        $insert_id = $this->db->insert_id();
+        $data = array(
+               'orig_post' => $insert_id
+            );
+        
+        $this->db->where('post_id', $insert_id);
+        $this->db->update('post', $data); 
+
+        redirect(site_url('site/post/'.$insert_id));
+    }
 }
