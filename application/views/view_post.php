@@ -9,7 +9,7 @@
 </div>
 <div class="row">
   <div class="col-md-9 col-sm-9 col-xs-9">  
-    <h4 class="text-truncated"><?php echo $post_title ?></h4>
+    <h4 class="text-truncated"><?php echo $job_title ?></h4>
   </div>
 </div>
 <?php
@@ -19,7 +19,7 @@ foreach ($posts as $post) {
   echo '
 <div class="panel panel-default" id="a9">
   <div class="panel-heading">     
-    <!--<div class="panel-title">'.$post->title.'    
+    <!--<div class="panel-title">    
       <div class="pull-right">  
         <div class="btn-group hidden-md hidden-lg"></div>
       </div>
@@ -59,12 +59,15 @@ foreach ($posts as $post) {
   <div class="col-md-12">
     <div class="clearfix">&nbsp;</div>
     <div id="fastreply" style="display: block; padding: 0px;">
-    <?php echo form_open(site_url('post/new_reply/'.$post_id.'/'.$user->id));?>
+    <?php echo form_open(site_url('post/new_reply/'.$job_id.'/'.$user->id));?>
     <div class="form-group">
       <label for="body">Reply</label>
       <textarea name="body" class="form-control" id="body" rows="12"></textarea>
     </div>
     <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Submit Post">
+  </form>
+    <?php echo form_open(site_url('post/accept_job/'.$job_id.'/'.$user->id));?>
+    <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Accept Job">
   </form>
     </div>
   </div>

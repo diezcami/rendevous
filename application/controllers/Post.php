@@ -23,15 +23,15 @@ class Post extends CI_Controller{
         # *the view that will be loaded.
         # Don't forget to add the function for the page below!
     }
-    public function new_reply($post_id, $user_id){
+    public function new_reply($job_id, $user_id){
         $data = array(
            'description' => $_POST['body'],
            'user_id' => $user_id,
-           'orig_post' => $post_id
+           'job_id' => $job_id
         );
         $this->db->insert('post', $data);
 
-        redirect(site_url('/site/post/'.$post_id));
+        redirect(site_url('/site/post/'.$job_id));
     }
 
     public function new_post($post_type, $user_id){
@@ -51,5 +51,8 @@ class Post extends CI_Controller{
         $this->db->update('post', $data); 
 
         redirect(site_url('site/post/'.$insert_id));
+    }
+    public function accept_job($job_id, $user_id){
+        //do thisz
     }
 }

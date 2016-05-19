@@ -35,7 +35,7 @@
                 <tr>
                   <td class='text-center'></td>
                   <td>
-                    <h4><a href='".site_url('/site/post/'.$job->post_id)."'>".$job->title."</a><br><small>".word_limiter($job->description, 15)."</small></h4>
+                    <h4><a href='".site_url('/site/post/'.$job->job_id)."'>".$job->title."</a><br><small>".word_limiter($job->description, 15)."</small></h4>
                   </td>
                   <td class='hidden-xs hidden-sm'>by <a href='#''>".$job->first_name." ".$job->last_name."</a><br><small><i class='fa fa-clock-o'></i> ".date('j M Y', strtotime($job->timestamp))."</small></td>
                   <td class='hidden-xs hidden-sm'>by <a href='#''>".$job->first_name." ".$job->last_name."</a><br><small><i class='fa fa-clock-o'></i> ".date('j M Y', strtotime($job->timestamp))."</small></td>
@@ -73,7 +73,7 @@
                 <tr>
                   <td class='text-center'></td>
                   <td>
-                    <h4><a href='".site_url('/site/post/'.$dev->post_id)."'>".$dev->title."</a><br><small>".word_limiter($dev->description, 15)."</small></h4>
+                    <h4><a href='".site_url('/site/post/'.$dev->job_id)."'>".$dev->title."</a><br><small>".word_limiter($dev->description, 15)."</small></h4>
                   </td>
                   <td class='hidden-xs hidden-sm'>by <a href='#''>".$dev->first_name." ".$dev->last_name."</a><br><small><i class='fa fa-clock-o'></i> ".date('j M Y', strtotime($dev->timestamp))."</small></td>
                   <td class='hidden-xs hidden-sm'>by <a href='#''>".$dev->first_name." ".$dev->last_name."</a><br><small><i class='fa fa-clock-o'></i> ".date('j M Y', strtotime($dev->timestamp))."</small></td>

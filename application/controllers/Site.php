@@ -43,67 +43,44 @@ class Site extends CI_Controller {
     public function posts(){
         $this->load->helper('text');
 
-        /*$this->db->select('*');
-        $this->db->from('post');
-        $this->db->join('users', 'post.user_id = users.id');
-        $this->db->where('post.type', 'client');
-        $this->db->where('post.post_id = post.orig_post');
-        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){      
-           $search_query = $this->input->post('search_query');
-           $this->db->like('post.title', $search_query, 'both');
-           $this->db->or_like('post.description', $search_query, 'both');  
-        }
-        $query = $this->db->get();*/
-        $query_string = "SELECT * FROM `post` JOIN `users` ON `post`.`user_id` = `users`.`id` WHERE `post`.`type` = 'client' AND `post`.`post_id` = `post`.`orig_post`";
+        $query_string = "SELECT * FROM `jobs` JOIN `users` ON `jobs`.`poster_id` = `users`.`id` JOIN `post` ON `jobs`.`post_id` = `post`.`post_id` WHERE `jobs`.`type` = 'client'";
         if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){
-            $query_string .= " AND (`post`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
+            $query_string .= " AND (`jobs`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
         }
-
         $query = $this->db->query($query_string);
-        echo $this->db->last_query()."<br>";
         $data['jobs'] = $query->result(); 
-        /*/$this->db->select('*');
-        $this->db->from('post');
-        $this->db->join('users', 'post.user_id = users.id');
-        $this->db->where('post.type', 'dev');
-        $this->db->where('post.post_id = post.orig_post');
-        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){      
-           $search_query = $this->input->post('search_query');
-           $this->db->like('post.title', $search_query, 'both');
-           $this->db->or_like('post.description', $search_query, 'both');
-        }*/
 
-        $query_string = "SELECT * FROM `post` JOIN `users` ON `post`.`user_id` = `users`.`id` WHERE `post`.`type` = 'dev' AND `post`.`post_id` = `post`.`orig_post`";
+        $query_string = "SELECT * FROM `jobs` JOIN `users` ON `jobs`.`poster_id` = `users`.`id` JOIN `post` ON `jobs`.`post_id` = `post`.`post_id` WHERE `jobs`.`type` = 'dev'";
         if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){
-            $query_string .= " AND (`post`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
+            $query_string .= " AND (`jobs`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
         }
-
         $query = $this->db->query($query_string);
-        echo $this->db->last_query();
         $data['devs'] = $query->result();
+
         $data['search_query'] = $this->input->post('search_query');
 
         $this->view($this->nav[3][2], $data);
     }
-    public function post($post_id){
+    public function post($job_id){
         //var_dump($this->auth_user_id);
         $this->db->select('*');
         $this->db->from('post');
         $this->db->join('users', 'post.user_id = users.id');
-        $this->db->where('orig_post', $post_id);
+        $this->db->where('job_id', $job_id);
         $query = $this->db->get();
-
-        $data['posts'] = $query->result();
+        $res = $query->result();
+        //var_dump($query);
+        $data['posts'] = $res;
 
         $this->db->select('title');
-        $this->db->from('post');
-        $this->db->where('post_id', $post_id);
+        $this->db->from('jobs');
+        $this->db->where('job_id', $job_id);
         $query = $this->db->get();
 
         $res = $query->result();
-        //var_dump($res);
-        $data['post_title'] = $res[0]->title;
-        $data['post_id'] = $post_id;
+        //var_dump($query);
+        $data['job_title'] = $res[0]->title;
+        $data['job_id'] = $job_id;
 
         $this->view('view_post', $data);
     }
