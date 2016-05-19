@@ -35,24 +35,39 @@ class Post extends CI_Controller{
     }
 
     public function new_post($post_type, $user_id){
-        $data = array(
-            'user_id' => $user_id,
-            'title' => $this->input->post('title'),
-            'description' => $this->input->post('description'),
-            'type' => $post_type
-        );
-        $this->db->insert('post', $data);
-        $insert_id = $this->db->insert_id();
-        $data = array(
-               'orig_post' => $insert_id
-            );
         
-        $this->db->where('post_id', $insert_id);
-        $this->db->update('post', $data); 
+        $data = array(
+            'poster_id' => $user_id,
+            'title' => $this->input->post('title'),
+            'type' => $post_type,
+            'client_id' => $user_id
+        );
+        $this->db->insert('jobs', $data);
+        $job_id = $this->db->insert_id();
+        $data = array(
+               'user_id' => $user_id,
+               'description' => $this->input->post('description'),
+               'job_id' => $job_id
+            );
+        $this->db->insert('post', $data);
+        $post_id = $this->db->insert_id();
 
-        redirect(site_url('site/post/'.$insert_id));
+        $data = array(
+                'post_id' => $post_id
+            );
+        $this->db->where('job_id', $job_id);
+        $this->db->update('jobs', $data);
+
+        redirect(site_url('site/post/'.$job_id));
     }
     public function accept_job($job_id, $user_id){
         //do thisz
+        $data = array(
+                'status' => 'accepted',
+                'developer_id' => $user_id
+            );
+        $this->db->where('job_id', $job_id);
+        $this->db->update('jobs', $data);
+        redirect(site_url('site/posts'));
     }
 }

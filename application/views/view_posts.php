@@ -51,21 +51,22 @@
       ?>
     </tbody>
   </table>
+  <!--
   <table class="table forum table-striped">
     <thead>
       <thead>
       <tr>
         <th class="cell-stat"></th>
         <th>
-          <h3>For Hire   <a href="<?php echo site_url('site/new_post/dev/'.$user->id)?>"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></h3>
+          <h3>For Hire   <a href="<?php //echo site_url('site/new_post/dev/'.$user->id)?>"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></h3>
         </th>
         <th class="cell-stat-2x hidden-xs hidden-sm">Poster</th>
         <th class="cell-stat-2x hidden-xs hidden-sm">Latest Reply</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody>-->
       <?php
-
+        /*/
         //var_dump($posts);
           if(count($devs)!=0){
             foreach( $devs as $dev ){
@@ -85,8 +86,8 @@
             <td></td>
             <td colspan="4" class="center">No topics have been added yet.</td>
           </tr>'; 
-       }
+       }*/
       ?>
-    </tbody>
-  </table>
+    <!--</tbody>
+  </table>-->
 </div>

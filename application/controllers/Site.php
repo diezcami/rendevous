@@ -23,62 +23,40 @@ class Site extends CI_Controller {
         parent::__construct();
         $this->load->helper('url');
         $this->load->helper('form');
+        $this->load->model('Job_model');
+        $this->load->model("Dashboard_model");
         # New pages must be declared in this array to include them in the nav bar.
         # array('Page Name', 'url', 'view name*' )
         # *the view that will be loaded.
         # Don't forget to add the function for the page below!
-        $this->nav = array( array('Dashboard', site_url('site/dashboard'), 'view_dashboard'),
+        $this->nav = array( /*array('Dashboard', site_url('site/dashboard'), 'view_dashboard'),*/
                             array('Profile', site_url('site/profile'), 'view_profile'),
                             array('Transactions', site_url('site/transactions'), 'view_transactions'),
-                            array('Posts', site_url('site/posts'), 'view_posts'),
+                            array('Listings', site_url('site/posts'), 'view_posts'),
                             array('Settings', site_url('site/settings'), 'view_settings')
             );
         if($this->ion_auth->is_admin()){
             array_push($this->nav, array('Users', site_url('site/users'), 'view_users'));
-            array_push($this->nav, array('Announcements', site_url('site/new_announcement'), 'view_new_announcement'));
         }
         $this->load->vars(array('NavigationArray'=>$this->nav));
         $this->load->library("pagination");
     }
-    public function posts(){
-        $this->load->helper('text');
-
-        $query_string = "SELECT * FROM `jobs` JOIN `users` ON `jobs`.`poster_id` = `users`.`id` JOIN `post` ON `jobs`.`post_id` = `post`.`post_id` WHERE `jobs`.`type` = 'client'";
-        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){
-            $query_string .= " AND (`jobs`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
-        }
-        $query = $this->db->query($query_string);
-        $data['jobs'] = $query->result(); 
-
-        $query_string = "SELECT * FROM `jobs` JOIN `users` ON `jobs`.`poster_id` = `users`.`id` JOIN `post` ON `jobs`.`post_id` = `post`.`post_id` WHERE `jobs`.`type` = 'dev'";
-        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){
-            $query_string .= " AND (`jobs`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
-        }
-        $query = $this->db->query($query_string);
-        $data['devs'] = $query->result();
-
-        $data['search_query'] = $this->input->post('search_query');
-
-        $this->view($this->nav[3][2], $data);
-    }
     public function post($job_id){
-        //var_dump($this->auth_user_id);
         $this->db->select('*');
         $this->db->from('post');
         $this->db->join('users', 'post.user_id = users.id');
         $this->db->where('job_id', $job_id);
         $query = $this->db->get();
         $res = $query->result();
-        //var_dump($query);
         $data['posts'] = $res;
 
-        $this->db->select('title');
+        $this->db->select('title,status');
         $this->db->from('jobs');
         $this->db->where('job_id', $job_id);
         $query = $this->db->get();
 
         $res = $query->result();
-        //var_dump($query);
+        $data['job'] = $res[0];
         $data['job_title'] = $res[0]->title;
         $data['job_id'] = $job_id;
 
@@ -110,7 +88,6 @@ class Site extends CI_Controller {
         $this->view();
     }
     public function dashboard(){
-        $this->load->model("Dashboard_model");
         $config = array();
         $config["per_page"] = 10;
         $config['total_rows'] = $this->Dashboard_model->record_count();
@@ -127,35 +104,38 @@ class Site extends CI_Controller {
         $this->view($this->nav[0][2], $data);
     }
     public function profile(){
-        //$this->load->model("User_Model");
-        //$data['user'] = $this->ion_auth->user()->row();
-        //$data['user'] = $data['user'][0]; // Always just one entry
-        //$data['display_user'] = $username==null?false:true;
-        $this->view($this->nav[1][2]);  
+        $this->view($this->nav[0][2]);  
     }
     public function transactions(){
-        $this->view($this->nav[2][2]);
+        $this->load->helper('text');
+        
+        $data['my_listings'] = $this->Job_model->get_my_listings($this->ion_auth->user()->row()->id, $this->input->post('search_query')); 
+        $data['search_query'] = $this->input->post('search_query');
+        $data['accepted_jobs'] = $this->Job_model->get_accepted_jobs($this->ion_auth->user()->row()->id, $this->input->post('search_query'));
+
+        $this->view($this->nav[1][2], $data);
+    }
+    public function posts(){
+        $this->load->helper('text');
+
+        $data['jobs'] = $this->Job_model->get_all_listings($this->input->post('search_query'));
+        $data['search_query'] = $this->input->post('search_query');
+
+        $this->view($this->nav[2][2], $data);
     }
     public function settings(){
-        $this->view($this->nav[4][2]);
+        $this->view($this->nav[3][2]);
     }
     public function users(){
+        $this->load->model('User_model');
+        $data['users'] = $this->User_model->get_all_users();
+        
+        $data['usergroup'] = $this->User_model->get_user_groups();
 
-        $query = $this->db->get('users');
-        $data['users'] = $query->result();
-
-        $this->db->select('users.id, groups.name');
-        $this->db->from('users');
-        $this->db->join('users_groups', 'users.id = users_groups.user_id');
-        $this->db->join('groups', 'groups.id = users_groups.group_id');
-
-        $query = $this->db->get();
-        $data['usergroup'] = $query->result();
-
-        $this->view($this->nav[5][2], $data);
+        $this->view($this->nav[4][2], $data);
     }
-    public function new_announcement(){
-            $this->view($this->nav[6][2]);
+    /*public function new_announcement(){
+            $this->view($this->nav[5][2]);
             if(isset($_POST['subject'])){
                 $this->send_email($_POST['subject'], $_POST['body']);
             }
@@ -169,7 +149,7 @@ class Site extends CI_Controller {
 
             //mail($user->email,$subject,$body);
         }
-    }
+    }*/
     public function edit_user($user_id){
         $data['user'] = $this->db->get_where('users', array('id' => $user_id))->result();
 

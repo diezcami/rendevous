@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2016 at 06:32 PM
+-- Generation Time: May 19, 2016 at 07:43 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `title` varchar(255) NOT NULL,
   `type` enum('dev','client') NOT NULL,
   `status` enum('accepted','not accepted') NOT NULL DEFAULT 'not accepted',
-  `post_id` int(10) unsigned NOT NULL,
+  `post_id` int(10) unsigned DEFAULT NULL,
   `poster_id` int(11) unsigned NOT NULL,
   `client_id` int(11) unsigned DEFAULT NULL,
   `developer_id` int(11) unsigned DEFAULT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   KEY `client_id` (`client_id`),
   KEY `developer_id` (`developer_id`),
   KEY `poster_id` (`poster_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `jobs`
@@ -82,8 +82,9 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 INSERT INTO `jobs` (`job_id`, `title`, `type`, `status`, `post_id`, `poster_id`, `client_id`, `developer_id`) VALUES
 (1, 'Rendevou', 'client', 'not accepted', 6, 1, 1, NULL),
-(2, 'Test', 'client', 'not accepted', 11, 1, 1, NULL),
-(3, 'Looking for work', 'dev', 'not accepted', 12, 5, NULL, 5);
+(2, 'Test', 'client', 'accepted', 11, 1, 1, 1),
+(3, 'Looking for work', 'dev', 'not accepted', 12, 5, NULL, 5),
+(5, 'New Job', 'client', 'not accepted', 15, 1, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -130,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   PRIMARY KEY (`post_id`),
   KEY `user_id` (`user_id`),
   KEY `job_id` (`job_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `post`
@@ -142,7 +143,8 @@ INSERT INTO `post` (`post_id`, `user_id`, `description`, `timestamp`, `job_id`) 
 (9, 1, 'BUm Again!', '2016-05-17 17:55:27', 1),
 (10, 5, 'hi, i''d like to make it', '2016-05-17 17:56:09', 1),
 (11, 5, 'test me lorem ipsumtest me lorem ipsumtest me lorem ipsumtest me lorem ipsumtest me lorem ipsum', '2016-05-17 18:50:51', 2),
-(12, 5, 'Hi! I''m  a fresh CS Grad looking for work. I know CI, PHP, HTML, JS, CSS. Please hire me. Thanks!', '2016-05-17 18:55:24', 3);
+(12, 5, 'Hi! I''m  a fresh CS Grad looking for work. I know CI, PHP, HTML, JS, CSS. Please hire me. Thanks!', '2016-05-17 18:55:24', 3),
+(15, 1, 'This is new job listing', '2016-05-19 16:47:26', 5);
 
 -- --------------------------------------------------------
 

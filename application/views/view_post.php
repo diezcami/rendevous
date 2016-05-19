@@ -66,9 +66,14 @@ foreach ($posts as $post) {
     </div>
     <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Submit Post">
   </form>
-    <?php echo form_open(site_url('post/accept_job/'.$job_id.'/'.$user->id));?>
-    <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Accept Job">
-  </form>
+    <?php
+      if($job->status == "not accepted"){
+        echo form_open(site_url('post/accept_job/'.$job_id.'/'.$user->id));
+        echo '<input type="submit" name="submit" class="btn btn-primary btn-sm" value="Accept Job">';
+        echo '</form>';
+      }
+    ?>
+  
     </div>
   </div>
 </div>
