@@ -31,5 +31,23 @@ class Job_model extends CI_Model {
         $query = $this->db->query($query_string);
         return $query->result();
     }
+
+    public function get_posts($job_id){
+        $this->db->select('*');
+        $this->db->from('post');
+        $this->db->join('users', 'post.user_id = users.id');
+        $this->db->where('job_id', $job_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function get_job($job_id){
+        $this->db->select('*');
+        $this->db->from('jobs');
+        $this->db->where('job_id', $job_id);
+        $query = $this->db->get();
+
+        return $query->result()[0];
+    }
 }
 ?>

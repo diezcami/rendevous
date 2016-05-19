@@ -24,7 +24,8 @@ class Site extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->model('Job_model');
-        $this->load->model("Dashboard_model");
+        $this->load->model('Dashboard_model');
+        $this->load->model('User_model');
         # New pages must be declared in this array to include them in the nav bar.
         # array('Page Name', 'url', 'view name*' )
         # *the view that will be loaded.
@@ -42,24 +43,9 @@ class Site extends CI_Controller {
         $this->load->library("pagination");
     }
     public function post($job_id){
-        $this->db->select('*');
-        $this->db->from('post');
-        $this->db->join('users', 'post.user_id = users.id');
-        $this->db->where('job_id', $job_id);
-        $query = $this->db->get();
-        $res = $query->result();
-        $data['posts'] = $res;
-
-        $this->db->select('title,status');
-        $this->db->from('jobs');
-        $this->db->where('job_id', $job_id);
-        $query = $this->db->get();
-
-        $res = $query->result();
-        $data['job'] = $res[0];
-        $data['job_title'] = $res[0]->title;
-        $data['job_id'] = $job_id;
-
+        
+        $data['posts'] = $this->Job_model->get_posts($job_id);
+        $data['job'] = $this->Job_model->get_job($job_id);
         $this->view('view_post', $data);
     }
     public function new_post($post_type, $user_id){
@@ -108,7 +94,7 @@ class Site extends CI_Controller {
     }
     public function transactions(){
         $this->load->helper('text');
-        
+
         $data['my_listings'] = $this->Job_model->get_my_listings($this->ion_auth->user()->row()->id, $this->input->post('search_query')); 
         $data['search_query'] = $this->input->post('search_query');
         $data['accepted_jobs'] = $this->Job_model->get_accepted_jobs($this->ion_auth->user()->row()->id, $this->input->post('search_query'));
@@ -127,41 +113,13 @@ class Site extends CI_Controller {
         $this->view($this->nav[3][2]);
     }
     public function users(){
-        $this->load->model('User_model');
         $data['users'] = $this->User_model->get_all_users();
-        
         $data['usergroup'] = $this->User_model->get_user_groups();
-
         $this->view($this->nav[4][2], $data);
     }
-    /*public function new_announcement(){
-            $this->view($this->nav[5][2]);
-            if(isset($_POST['subject'])){
-                $this->send_email($_POST['subject'], $_POST['body']);
-            }
-    }
-    
-    public function send_email($subject, $body){
-        $query = $this->db->get('users');
-        $result = $query->result();
-        foreach($result as $user){
-            //echo $user->email." ".$subject." ".$body;
-
-            //mail($user->email,$subject,$body);
-        }
-    }*/
     public function edit_user($user_id){
-        $data['user'] = $this->db->get_where('users', array('id' => $user_id))->result();
-
-        $this->db->select('users.id, groups.name');
-        $this->db->from('users');
-        $this->db->join('users_groups', 'users.id = users_groups.user_id');
-        $this->db->join('groups', 'groups.id = users_groups.group_id');
-        $this->db->where('users.id', $user_id);
-
-        $query = $this->db->get();
-        $data['usergroup'] = $query->result();
-
+        $data['user'] = $this->User_model->get_user($user_id);
+        $data['usergroup'] = $this->User_model->get_user_groups($user_id);;
         $this->view('view_edit_user', $data);
     }
     public function login(){

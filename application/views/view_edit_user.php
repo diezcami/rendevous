@@ -20,14 +20,14 @@
           </tr>
         </thead>
         <?php
-        //var_dump($usergroup);
-          echo form_open(site_url('user/edit_user/'.$user[0]->id));
+        //var_dump($user);
+          echo form_open(site_url('user/edit_user/'.$user->id));
             
             echo "
             <tr>
-              <td><input type='text' class='form-control' name='first_name' value='".$user[0]->first_name."'></td>
-              <td><input type='text' class='form-control' name='last_name' value='".$user[0]->last_name."'></td>
-              <td><input type='text' class='form-control' name='email' value='".$user[0]->email."'></td>";
+              <td><input type='text' class='form-control' name='first_name' value='".$user->first_name."'></td>
+              <td><input type='text' class='form-control' name='last_name' value='".$user->last_name."'></td>
+              <td><input type='text' class='form-control' name='email' value='".$user->email."'></td>";
               echo "<td>";
               foreach($usergroup as $ug){
                   echo $ug->name. " ";

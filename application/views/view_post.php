@@ -9,11 +9,11 @@
 </div>
 <div class="row">
   <div class="col-md-9 col-sm-9 col-xs-9">  
-    <h4 class="text-truncated"><?php echo $job_title ?></h4>
+    <h4 class="text-truncated"><?php echo $job->title ?></h4>
   </div>
 </div>
 <?php
-//var_dump($posts);
+//var_dump($job);
 echo '<div class="clearfix top-border">&nbsp;</div>';
 foreach ($posts as $post) {
   echo '
@@ -54,12 +54,13 @@ foreach ($posts as $post) {
   </div>
 </div>';
 }
+//var_dump($job);
 ?>
 <div class="row">
   <div class="col-md-12">
     <div class="clearfix">&nbsp;</div>
     <div id="fastreply" style="display: block; padding: 0px;">
-    <?php echo form_open(site_url('post/new_reply/'.$job_id.'/'.$user->id));?>
+    <?php echo form_open(site_url('post/new_reply/'.$job->job_id.'/'.$user->id));?>
     <div class="form-group">
       <label for="body">Reply</label>
       <textarea name="body" class="form-control" id="body" rows="12"></textarea>
@@ -68,7 +69,7 @@ foreach ($posts as $post) {
   </form>
     <?php
       if($job->status == "not accepted"){
-        echo form_open(site_url('post/accept_job/'.$job_id.'/'.$user->id));
+        echo form_open(site_url('post/accept_job/'.$job->job_id.'/'.$user->id));
         echo '<input type="submit" name="submit" class="btn btn-primary btn-sm" value="Accept Job">';
         echo '</form>';
       }

@@ -17,11 +17,12 @@
             return $query->result();
         }
 
-        public function get_user_groups(){
+        public function get_user_groups($user_id=null){
             $this->db->select('users.id, groups.name');
             $this->db->from('users');
             $this->db->join('users_groups', 'users.id = users_groups.user_id');
             $this->db->join('groups', 'groups.id = users_groups.group_id');
+            if($user_id!=null)$this->db->where('users.id', $user_id);
 
             $query = $this->db->get();
             return $query->result();
