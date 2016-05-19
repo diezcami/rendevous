@@ -42,8 +42,8 @@ class Site extends CI_Controller {
     }
     public function posts(){
         $this->load->helper('text');
-        //var_dump($this->input->post('search_query'));
-        $this->db->select('*');
+
+        /*$this->db->select('*');
         $this->db->from('post');
         $this->db->join('users', 'post.user_id = users.id');
         $this->db->where('post.type', 'client');
@@ -53,12 +53,16 @@ class Site extends CI_Controller {
            $this->db->like('post.title', $search_query, 'both');
            $this->db->or_like('post.description', $search_query, 'both');  
         }
-        
-        $query = $this->db->get();
-        //echo $this->db->last_query();
-        $data['jobs'] = $query->result();
-        
-        $this->db->select('*');
+        $query = $this->db->get();*/
+        $query_string = "SELECT * FROM `post` JOIN `users` ON `post`.`user_id` = `users`.`id` WHERE `post`.`type` = 'client' AND `post`.`post_id` = `post`.`orig_post`";
+        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){
+            $query_string .= " AND (`post`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
+        }
+
+        $query = $this->db->query($query_string);
+        echo $this->db->last_query()."<br>";
+        $data['jobs'] = $query->result(); 
+        /*/$this->db->select('*');
         $this->db->from('post');
         $this->db->join('users', 'post.user_id = users.id');
         $this->db->where('post.type', 'dev');
@@ -66,11 +70,16 @@ class Site extends CI_Controller {
         if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){      
            $search_query = $this->input->post('search_query');
            $this->db->like('post.title', $search_query, 'both');
-           $this->db->or_like('post.description', $search_query, 'both');  
+           $this->db->or_like('post.description', $search_query, 'both');
+        }*/
+
+        $query_string = "SELECT * FROM `post` JOIN `users` ON `post`.`user_id` = `users`.`id` WHERE `post`.`type` = 'dev' AND `post`.`post_id` = `post`.`orig_post`";
+        if(null !== $this->input->post('search_query') && "" !== $this->input->post('search_query')){
+            $query_string .= " AND (`post`.`title` LIKE '%".$this->input->post('search_query')."%' OR `post`.`description` LIKE '%".$this->input->post('search_query')."%')";
         }
-        
-        $query = $this->db->get();
-        //echo $this->db->last_query();
+
+        $query = $this->db->query($query_string);
+        echo $this->db->last_query();
         $data['devs'] = $query->result();
         $data['search_query'] = $this->input->post('search_query');
 
