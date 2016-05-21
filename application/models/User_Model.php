@@ -5,7 +5,12 @@
         }
 
         public function get_user($user_id){
-            return $this->ion_auth->user($user_id);
+            //return $this->ion_auth->user($user_id);
+            $this->db->select('*');
+            $this->db->from('users');
+            $this->db->where('users.id',$user_id);
+            $query = $this->db->get();
+            return $query->result();
         }
         
         public function update_user($username, $first_name, $last_name, $birthdate, $sex, $skills, $work_exp, $project){

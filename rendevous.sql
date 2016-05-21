@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2016 at 07:43 PM
+-- Generation Time: May 20, 2016 at 06:41 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `last_name` varchar(50) DEFAULT NULL,
   `sex` enum('Male','Female') NOT NULL,
   `location` varchar(255) NOT NULL,
-  `birthdate` date NOT NULL,
+  `birthdate` varchar(255) NOT NULL,
   `skills` text NOT NULL,
   `work_exp` text NOT NULL,
   `projects` text NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `sex`, `location`, `birthdate`, `skills`, `work_exp`, `projects`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1463661688, 1, 'Admin', 'istrator', 'Male', '', '0000-00-00', '', '', '', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '', '', NULL, NULL, NULL, 1268889823, 1463714902, 1, 'Admin', 'istrator', 'Male', 'Paranaque', '01 July 1995', '', '', '', 'ADMIN', '0'),
 (5, '::1', NULL, '$2y$08$6aBPNPLBGwYE0K0soCt.3ufra4ee4RJWL201URbBnK6SvVhrxgr9.', NULL, 'basil@compsat.org', NULL, NULL, NULL, NULL, 1463488067, 1463507755, 1, 'Basil', 'Begonia', 'Male', '', '0000-00-00', '', '', '', NULL, NULL);
 
 -- --------------------------------------------------------

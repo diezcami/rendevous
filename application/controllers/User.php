@@ -34,10 +34,15 @@ class User extends CI_Controller{
         $data = array(
                'first_name' => $this->input->post('first_name'),
                'last_name' => $this->input->post('last_name'),
-               'email' => $this->input->post('email')
+               'sex' => $this->input->post('sex'),
+               'location' => $this->input->post('location'),
+               'birthdate' => $this->input->post('birthdate'),
+               'skills' => $this->input->post('skills'),
+               'work_exp' => $this->input->post('work_exp'),
+               'projects' => $this->input->post('projects'),
             );
         $this->ion_auth->update($user_id, $data);
-        redirect(site_url('/site/users'));
+        redirect(site_url('/site/profile'));
     }
 
     public function new_user(){

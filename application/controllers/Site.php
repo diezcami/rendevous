@@ -118,8 +118,10 @@ class Site extends CI_Controller {
         $this->view($this->nav[4][2], $data);
     }
     public function edit_user($user_id){
-        $data['user'] = $this->User_model->get_user($user_id);
-        $data['usergroup'] = $this->User_model->get_user_groups($user_id);;
+        //var_dump($user_id);
+        $data['user_edit'] = $this->User_model->get_user($user_id)[0];
+        $data['usergroup'] = $this->User_model->get_user_groups($user_id);
+        //svar_dump($data['user']);
         $this->view('view_edit_user', $data);
     }
     public function login(){
@@ -129,5 +131,8 @@ class Site extends CI_Controller {
         $this->ion_auth->logout();
         redirect(site_url());
     }
-
+    public function view_profile($user_id){
+        $data['user_other'] = $this->User_model->get_user($user_id)[0];
+        $this->view('view_other_profile', $data);  
+    }
 }

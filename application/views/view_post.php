@@ -13,9 +13,9 @@
   </div>
 </div>
 <?php
-//var_dump($job);
 echo '<div class="clearfix top-border">&nbsp;</div>';
 foreach ($posts as $post) {
+
   echo '
 <div class="panel panel-default" id="a9">
   <div class="panel-heading">     
@@ -32,7 +32,7 @@ foreach ($posts as $post) {
       </div>
       <div class="col-md-2 col-sm-3 hidden-xs text-center userblock">
         <div class="clerafix">&nbsp;</div>
-        <div class="push_bottom_5"></div>'.$post->first_name.' '.$post->last_name.' 
+        <div class="push_bottom_5"></div><a href="'.site_url('site/view_profile/'.$post->user_id).'">'.$post->first_name.' '.$post->last_name.'</a> 
         <div class="text-muted text-left"><small>'.$post->email.'</small></div>
         <div class="clerafix">&nbsp;</div>
       </div>

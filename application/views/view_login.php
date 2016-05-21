@@ -7,7 +7,7 @@
   ?>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('css/bootstrap.css')?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('css/style.css')?>">
-  <title>JCAPLDP</title>
+  <title>Rendevous</title>
 </head>
 <body>
 <div class="container">
